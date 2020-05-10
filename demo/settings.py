@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from celery.schedules import crontab
+import demo1
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -124,3 +126,10 @@ STATIC_URL = '/static/'
 BROKER_URL = 'amqp://127.0.0.1:5672/0'
 BROKER_TRANSPORT = 'rabbitmq'
 CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+CELERY_BEAT_SCHEDULE = {
+    "sample_task": {
+        "task": "demo1.tasks.hello_world",
+        "schedule": crontab(minute="*/1"),
+    },
+}
